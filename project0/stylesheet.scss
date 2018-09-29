@@ -1,0 +1,43 @@
+%liststyling {
+	color: aqua;
+	background-color: black;
+	width: 500px;
+}
+
+.row { 
+	div {
+		background-color: blue;
+		padding: 20px;
+		border: 2px solid black;
+		font-weight: bold;
+		height: 100px;
+	}
+}
+
+a {
+	margin: auto;
+	color: white;
+}
+
+#mypic {
+	padding: 0px;
+}
+
+.col-md-3 {
+}
+
+@media (min-width: 500px) {
+	.mobilesize {
+		display: none;
+	}
+	ol > li {
+		color: aqua;
+	}
+}				
+
+ul { 
+	li {
+		@extend %liststyling;
+		font-style: italic;
+	}
+}

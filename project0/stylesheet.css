@@ -1,0 +1,29 @@
+ul li {
+  color: aqua;
+  background-color: black;
+  width: 500px; }
+
+.row div {
+  background-color: blue;
+  padding: 20px;
+  border: 2px solid black;
+  font-weight: bold;
+  height: 100px; }
+
+a {
+  margin: auto;
+  color: white; }
+
+#mypic {
+  padding: 0px; }
+
+@media (min-width: 500px) {
+  .mobilesize {
+    display: none; }
+
+  ol > li {
+    color: aqua; } }
+ul li {
+  font-style: italic; }
+
+/*# sourceMappingURL=stylesheet.css.map */

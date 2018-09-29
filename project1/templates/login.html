@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}
+    Login Page
+{% endblock %}
+{% block body %}
+    {% if session['logged_in'] %}
+        <p>You are logged in - redirecting (wip)</p>
+    {% else %}
+        <p>Please log in:</p>
+        <form action="/login" method="POST"/>
+            <input type="username" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <input type="submit" value="Logon">
+        </form>
+
+        <p>Or register:</p>
+        <form action="/register" method="POST"/>
+            <input type="username" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <input type="submit" value="Register">
+        </form>
+    {% endif %}
+{% endblock %}          

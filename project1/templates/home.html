@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %}
+    Home Page
+{% endblock %}
+{% block body %}
+    {% if session['logged_in'] %}
+        <p>You are logged in {username}</p>
+    {% else %}
+        <p><a href="login.html">Please log in</a></p>
+    {% endif %}
+{% endblock %}          

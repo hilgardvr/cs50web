@@ -12,9 +12,15 @@ def main():
     reader = csv.reader(file)
 
     for isbn, title, author, year in reader:
+        """print(type(int(year)))
+        intYear = int(year)"""
+        if isbn == "isbn":
+            print(isbn)
+            continue
         db.execute("INSERT INTO books (isbn, title, author, year) VALUES (:isbn, :title, :author, :year)",
             {"isbn":isbn, "title":title, "author":author, "year":year})
         print(f"Added: {title}")
+    db.commit()
 
 if __name__ == "__main__":
     main()

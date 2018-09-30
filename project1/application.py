@@ -24,10 +24,13 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 def index():
     currentUser = session.get('logged_in')
+    print(currentUser)
     if not currentUser:
-        return render_template('login.html')
+        """return render_template('index.html', currentUser=currentUser)"""
+        return render_template('index.html')
     else:
-        return render_template('login.html')
+        """return render_template('index.html', currentUser=currentUser)"""
+        return render_template('index.html')
 
 @app.route("/login", methods=['POST'])
 def logon():
@@ -35,8 +38,6 @@ def logon():
     password = request.form['password']
     session['logged_in'] = db.execute("SELECT username FROM users WHERE username = :username AND password = :password",
         {"username":username, "password":password}).fetchone()
-    """if request.form['password'] == 'password' and request.form['username'] == 'admin':
-        session['logged_in'] = True"""
     return redirect('/')
 
 

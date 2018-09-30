@@ -23,13 +23,34 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    if not session.get('logged_in'):
+    currentUser = session.get('logged_in')
+    if not currentUser:
         return render_template('login.html')
     else:
-        return "Logged in - Welcome"
+        return f"Logged in - {currentUser}"
 
 @app.route("/login", methods=['POST'])
-def do_admin_logon():
-    if request.form['password'] == 'password' and request.form['username'] == 'admin':
-        session['logged_in'] = True
+def logon():
+    username = request.form['username']
+    password = request.form['password']
+    session['logged_in'] = db.execute("SELECT username FROM users WHERE username = :username AND password = :password",
+        {"username":username, "password":password}).fetchone()
+    """if request.form['password'] == 'password' and request.form['username'] == 'admin':
+        session['logged_in'] = True"""
     return redirect('/')
+
+
+@app.route("/register", methods=['POST'])
+def register():
+    if request.form['username'] != None and request.form['password'] != None:
+        username = request.form['username']
+        password = request.form['password']
+        db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
+            {"username":username, "password":password})
+        db.commit();
+        print(f"Added user {username} and {password}")
+        session['logged_in'] = username
+        return redirect('/')
+    else:
+        print("Empty field in form")
+        return redirect('/')

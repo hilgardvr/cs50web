@@ -4,13 +4,13 @@
 {% endblock %}
 {% block body %}
     {% if session['logged_in'] %}
-        <p>You are logged in - redirecting (wip)</p>
+        <p>You are logged in</p>
     {% else %}
         <p>Please log in:</p>
         <form action="/login" method="POST"/>
             <input type="username" name="username" placeholder="Username">
             <input type="password" name="password" placeholder="Password">
-            <input type="submit" value="Logon">
+            <input type="submit" value="Login">
         </form>
 
         <p>Or register:</p>

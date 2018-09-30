@@ -27,7 +27,7 @@ def index():
     if not currentUser:
         return render_template('login.html')
     else:
-        return f"Logged in - {currentUser}"
+        return render_template('login.html')
 
 @app.route("/login", methods=['POST'])
 def logon():
@@ -54,3 +54,8 @@ def register():
     else:
         print("Empty field in form")
         return redirect('/')
+
+@app.route("/logout", methods=['GET'])
+def logout():
+    session['logged_in'] = None;
+    return redirect('/')

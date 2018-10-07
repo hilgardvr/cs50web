@@ -26,11 +26,9 @@ def index():
     currentUser = session.get('logged_in')
     print(currentUser)
     if not currentUser:
-        """return render_template('index.html', currentUser=currentUser)"""
         return render_template('index.html')
     else:
-        """return render_template('index.html', currentUser=currentUser)"""
-        return render_template('index.html')
+        return render_template('home.html', user=currentUser)
 
 @app.route("/login", methods=['POST'])
 def logon():
@@ -60,3 +58,11 @@ def register():
 def logout():
     session['logged_in'] = None;
     return redirect('/')
+
+@app.route("/search_results", methods=['GET'])
+def search_results():
+    if request.args.get('isbn') != "": #or request.args.get['bookname'] != None or request.args['author'] != None:
+        result = "todo get db query"
+    else:
+        result = "No result yet ..."
+    return render_template('home.html', result=result)

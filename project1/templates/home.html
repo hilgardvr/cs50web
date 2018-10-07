@@ -4,8 +4,23 @@
 {% endblock %}
 {% block body %}
     {% if session['logged_in'] %}
-        <p>You are logged in {username}</p>
+    
+    <p>You are logged in</p>
+    
+    <span>Your result is: {{ result }}</span>
+
+    <div>
+        <p>Search for a book:</p>
+        <form action="/search_results" method="GET"/>
+            <input type="text" name="isbn" placeholder="ISBN">
+            <input type="text" name="bookname" placeholder="Bookname">
+            <input type="text" name="author" placeholder="Author">
+            <input type="submit" value="Search">
+        </form>
+    </div>       
     {% else %}
+        <h1>You are not logged in</h1>
         <p><a href="login.html">Please log in</a></p>
-    {% endif %}
+    {% endif %}   
+
 {% endblock %}          

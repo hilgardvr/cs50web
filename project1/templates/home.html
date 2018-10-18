@@ -5,7 +5,7 @@
 {% block body %}
     {% if session['logged_in'] %}
     
-    <p>You are logged in</p>
+    <p>You are logged in: {{ user }}</p>
     
     <span>Your result is: {{ result }}</span>
 

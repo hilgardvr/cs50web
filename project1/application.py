@@ -20,11 +20,11 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-
 @app.route("/")
 def index():
-    currentUser = session.get('logged_in')
-    print(currentUser)
+    currentUser = None
+    if session['logged_in'] != None:
+        currentUser = session['logged_in'][0]
     if not currentUser:
         return render_template('index.html')
     else:
@@ -61,8 +61,12 @@ def logout():
 
 @app.route("/search_results", methods=['GET'])
 def search_results():
-    if request.args.get('isbn') != "": #or request.args.get['bookname'] != None or request.args['author'] != None:
-        result = "todo get db query"
+    user = session['logged_in'][0]
+    isbn = request.args.get('isbn')
+    bookname = request.args.get('bookname')
+    author = request.args.get('author')
+    if not isbn and not bookname and not author:
+        result = "No search parameters - please enter search params ..."
     else:
-        result = "No result yet ..."
-    return render_template('home.html', result=result)
+        result = "todo get db query"
+    return render_template('home.html', result=result, user=user)

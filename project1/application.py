@@ -62,11 +62,13 @@ def logout():
 @app.route("/search_results", methods=['GET'])
 def search_results():
     user = session['logged_in'][0]
-    isbn = request.args.get('isbn')
-    bookname = request.args.get('bookname')
-    author = request.args.get('author')
-    if not isbn and not bookname and not author:
+    isbn = '%' + request.args.get('isbn') + '%'
+    bookname = '%' + request.args.get('bookname') + '%'
+    author = '%' + request.args.get('author') + '%'
+    if isbn == "%%" and bookname == "%%" and author == "%%":
         result = "No search parameters - please enter search params ..."
     else:
-        result = "todo get db query"
+        result = db.execute("SELECT * FROM books WHERE isbn LIKE (:isbn) AND title LIKE (:title) AND author LIKE (:author)",
+            {"isbn":isbn, "title":bookname, "author":author}).fetchall()
+        print (result)
     return render_template('home.html', result=result, user=user)

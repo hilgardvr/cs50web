@@ -1,4 +1,5 @@
 import os
+import requests
 
 from flask import Flask, session, render_template, request, redirect
 from flask_session import Session
@@ -23,7 +24,7 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 def index():
     currentUser = None
-    if session['logged_in'] != None:
+    if session['logged_in']:
         currentUser = session['logged_in'][0]
     if not currentUser:
         return render_template('index.html')
@@ -70,5 +71,12 @@ def search_results():
     else:
         result = db.execute("SELECT * FROM books WHERE isbn LIKE (:isbn) AND title LIKE (:title) AND author LIKE (:author)",
             {"isbn":isbn, "title":bookname, "author":author}).fetchall()
-        print (result)
     return render_template('home.html', result=result, user=user)
+
+@app.route("/book_details/<isbn>/<tit>/<author>/<year>", methods=['GET'])
+def book_results(isbn, tit, author, year):
+    user = session['logged_in'][0]
+    our_reviews = ["review 1", "review 2"]
+    res = requests.get("http://www.goodreads.com/book/review_counts.json", params={"key": "ob5yNrEgt6v1uC4ZtVumg", "isbns": isbn})
+    print (res.json())
+    return render_template('book_details.html', user=user, isbn=isbn, title=tit, year=year, our_reviews=our_reviews)

@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}
+    Home Page
+{% endblock %}
+{% block body %}
+    {% if session['logged_in'] %}
+    
+    <p>You are logged in: {{ user }}</p>
+    
+    <div>
+        Your book has the following details:<br>
+        isbn: {{ isbn }}<br>
+        title: {{ title }}<br>
+        author: {{ author }}<br>
+        year: {{ year }}<br>
+        <form action="/create_review" method="POST"/>
+            <input type="text" name="review" placeholder="Write your review">
+            <input type="submit" value="Submit Review">
+        <form/> 
+            
+        {% for rev in our_reviews %}
+            <li>review: {{ rev }} </li>
+        {% endfor %}
+    </div>
+
+    {% else %}
+        <h1>You are not logged in</h1>
+        <p><a href="login.html">Please log in</a></p>
+    {% endif %}   
+
+{% endblock %}          

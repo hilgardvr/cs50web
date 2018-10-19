@@ -7,8 +7,6 @@
     
     <p>You are logged in: {{ user }}</p>
     
-    <span>Your result is: {{ result }}</span>
-
     <div>
         <p>Search for a book:</p>
         <form action="/search_results" method="GET"/>
@@ -17,7 +15,15 @@
             <input type="text" name="author" placeholder="Author">
             <input type="submit" value="Search">
         </form>
-    </div>       
+    </div>
+    
+    <div>Your search result is:
+        {% for res in result %}
+            <li><a href="{{ url_for('book_results', isbn=res.isbn, tit=res.title, author=res.author, year=res.year) }}">{{res.title}}</a></li>
+        {% endfor %}
+    </div>
+
+           
     {% else %}
         <h1>You are not logged in</h1>
         <p><a href="login.html">Please log in</a></p>

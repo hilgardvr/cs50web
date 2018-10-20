@@ -3,8 +3,8 @@
     Login Page
 {% endblock %}
 {% block body %}
-    {% if session['logged_in'] %}
-        <p>You are logged in</p>
+    {% if session.get('logged_in') %}
+        <p>Welcome, you are logged in </p>
     {% else %}
         <p>Please log in:</p>
         <form action="/login" method="POST"/>

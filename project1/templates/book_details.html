@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}
-    Home Page
+    Reviews Page
 {% endblock %}
 {% block body %}
     {% if session['logged_in'] %}
@@ -14,12 +14,24 @@
         author: {{ author }}<br>
         year: {{ year }}<br>
         <form action="/create_review" method="POST"/>
+            <select name="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <input type="hidden" name="reviewer" value="{{ user }}">
+            <input type="hidden" name="book" value="{{ isbn }}">
             <input type="text" name="review" placeholder="Write your review">
             <input type="submit" value="Submit Review">
         <form/> 
             
         {% for rev in our_reviews %}
-            <li>review: {{ rev }} </li>
+            <li>
+                Rating: {{ rev.rating }}<br>
+                Review: {{ rev.review }}<br> 
+            </li><br>
         {% endfor %}
     </div>
 

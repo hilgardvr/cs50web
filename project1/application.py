@@ -51,8 +51,6 @@ def register():
         db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
             {"username":username, "password":password})
         db.commit();
-        print(f"Added user {username} and {password}")
-        session['logged_in'] = username
         return redirect('/')
     else:
         print("Empty field in form")

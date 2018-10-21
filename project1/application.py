@@ -1,7 +1,8 @@
 import os
 import requests
+import json
 
-from flask import Flask, session, render_template, request, redirect
+from flask import Flask, session, render_template, request, redirect, abort
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -111,3 +112,26 @@ def create_review():
         {"reviewer":user_id, "review":review, "book_id":book_id, "rating":rating})
     db.commit()
     return book_results(isbn, title, author, year)
+
+@app.route("/api/<isbn>", methods=["GET"])
+def api(isbn):
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+    if not book:
+        abort(404)
+    book_id = book.id
+    title = book.title
+    author = book.author
+    year = book.year
+    reviews = db.execute("SELECT * FROM our_reviews WHERE book_id = :book_id", {"book_id":book_id}).fetchall()
+    review_count = len(reviews)
+    if review_count == 0:
+        temp = {'title':title,'author':author,'year':year,'isbn':isbn,
+            'review_count':0}
+        return json.dumps(temp)
+    review_total = 0
+    for rev in reviews:
+        review_total += rev.rating
+    average_score = review_total / review_count
+    temp = {'title':title,'author':author,'year':year,'isbn':isbn,
+        'review_count':review_count,'average_score':average_score}
+    return json.dumps(temp)

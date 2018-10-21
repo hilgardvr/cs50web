@@ -8,11 +8,11 @@
     <p>You are logged in: {{ user }}</p>
     
     <div>
-        Your book has the following details:<br>
-        isbn: {{ isbn }}<br>
-        title: {{ title }}<br>
-        author: {{ author }}<br>
-        year: {{ year }}<br>
+        Your book search result has the following details:<br><br>
+        Title: <b>{{ title }}</b><br>
+        Author: <b>{{ author }}</b><br>
+        Isbn: {{ isbn }}<br>
+        Year: {{ year }}<br><br>
         <form action="/create_review" method="POST"/>
             <select name="rating">
                 <option value="1">1</option>
@@ -25,19 +25,26 @@
             <input type="hidden" name="book" value="{{ isbn }}">
             <input type="text" name="review" placeholder="Write your review">
             <input type="submit" value="Submit Review">
-        <form/> 
+        <form/> <br/><br>
             
+        <h4>Our Book Reviews</h4>
         {% for rev in our_reviews %}
             <li>
                 Rating: {{ rev.rating }}<br>
                 Review: {{ rev.review }}<br> 
             </li><br>
-        {% endfor %}
+        {% endfor %}<br/>
+        
+        <h4>Goodreads Book Reviews</h4>
+        <p>
+            Number of Goodreads Reviews: {{ num_gr }}<br/>
+            Average Review: {{ ave_gr }}
+        </p>
     </div>
 
     {% else %}
         <h1>You are not logged in</h1>
         <p><a href="login.html">Please log in</a></p>
-    {% endif %}   
+    {% endif %}
 
 {% endblock %}          

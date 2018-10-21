@@ -26,17 +26,18 @@ def index():
     currentUser = None
     if session['logged_in']:
         currentUser = session['logged_in'][0]
-        print (f"***** User: {currentUser}")
     if currentUser == None:
         return render_template('index.html')
     else:
         return render_template('home.html', user=currentUser)
 
 @app.route("/login", methods=['POST'])
-def logon():
+def login():
     username = request.form['username']
     password = request.form['password']
     session['logged_in'] = db.execute("SELECT username FROM users WHERE username = :username AND password = :password",
+        {"username":username, "password":password}).fetchone()
+    session['user_id'] = db.execute("SELECT id FROM users WHERE username = :username AND password = :password",
         {"username":username, "password":password}).fetchone()
     return redirect('/')
 
@@ -58,7 +59,8 @@ def register():
 
 @app.route("/logout", methods=['GET'])
 def logout():
-    session['logged_in'] = None;
+    session['logged_in'] = None
+    session['user_id'] = None
     return redirect('/')
 
 @app.route("/search_results", methods=['GET'])
@@ -77,28 +79,35 @@ def search_results():
 @app.route("/book_details/<isbn>/<tit>/<author>/<year>", methods=['GET'])
 def book_results(isbn, tit, author, year):
     user = session['logged_in'][0]
-    book_id = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn":isbn}).fetchone()
-    book_id = book_id.id
-    print (f"**** bookid: { book_id }")
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn":isbn}).fetchone()
+    book_id = book.id
     our_reviews = []
     if book_id:
         our_reviews = db.execute("SELECT * FROM our_reviews WHERE book_id = :book_id", {"book_id":book_id}).fetchall()
         print (our_reviews)
     res = requests.get("http://www.goodreads.com/book/review_counts.json", params={"key": "ob5yNrEgt6v1uC4ZtVumg", "isbns": isbn})
-    print (res.json())
-    return render_template('book_details.html', user=user, isbn=isbn, title=tit, author=author, year=year, our_reviews=our_reviews)
+    gr_data = res.json()
+    num_ratings = gr_data['books'][0]['ratings_count']
+    ave_rating = gr_data['books'][0]['average_rating']
+    return render_template('book_details.html', user=user, isbn=isbn, title=tit, author=author, year=year, our_reviews=our_reviews, num_gr=num_ratings, ave_gr=ave_rating)
 
 @app.route("/create_review", methods=["POST"])
 def create_review():
     reviewer = request.form['reviewer']
     isbn = request.form['book']
+    user_id = session["user_id"][0]
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+    book_id = book.id
+    title = book.title
+    author = book.author
+    year = book.year
+    old_reviews = db.execute("SELECT * FROM our_reviews WHERE book_id = :book_id", {"book_id":book_id}).fetchall()
+    for rev in old_reviews:
+        if rev.reviewer_id == user_id:
+            return book_results(isbn, title, author, year)
     rating = request.form['rating']
-    print(f"reviewer: {reviewer} isbn: {isbn} rating: {rating}")
-    user_id = db.execute("SELECT id FROM users WHERE username = :un", {"un": reviewer}).fetchone().id
-    book_id = db.execute("SELECT id FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone().id
     review = request.form['review']
     db.execute("INSERT INTO our_reviews (reviewer_id, review, book_id, rating) VALUES (:reviewer, :review, :book_id, :rating)",
         {"reviewer":user_id, "review":review, "book_id":book_id, "rating":rating})
     db.commit()
-    result = db.execute("SELECT * FROM our_reviews WHERE book_id = :book_id", {"book_id":book_id}).fetchall()
-    return render_template('home.html', result=result, user=session['logged_in'][0])
+    return book_results(isbn, title, author, year)

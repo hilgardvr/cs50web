@@ -16,12 +16,15 @@
             <input type="submit" value="Search">
         </form>
     </div>
-    
-    <div>Your search result is:
-        {% for res in result %}
-            <li><a href="{{ url_for('book_results', isbn=res.isbn, tit=res.title, author=res.author, year=res.year) }}">{{res.title}}</a></li>
-        {% endfor %}
-    </div>
+        {% if not result %}
+            <p>No search results</p>
+        {% else %}
+            <div>Your search result is:
+                {% for res in result %}
+                    <li><a href="{{ url_for('book_results', isbn=res.isbn, tit=res.title, author=res.author, year=res.year) }}">{{res.title}}</a></li>
+                {% endfor %}
+            </div>
+        {% endif %}
 
            
     {% else %}

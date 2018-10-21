@@ -25,7 +25,7 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 def index():
     currentUser = None
-    if session['logged_in']:
+    if ('logged_in' in session) and (len(session) > 0) and (session['logged_in']):
         currentUser = session['logged_in'][0]
     if currentUser == None:
         return render_template('index.html')
@@ -71,7 +71,7 @@ def search_results():
     bookname = '%' + request.args.get('bookname') + '%'
     author = '%' + request.args.get('author') + '%'
     if isbn == "%%" and bookname == "%%" and author == "%%":
-        result = "No search parameters - please enter search params ..."
+        result = False
     else:
         result = db.execute("SELECT * FROM books WHERE isbn LIKE (:isbn) AND title LIKE (:title) AND author LIKE (:author)",
             {"isbn":isbn, "title":bookname, "author":author}).fetchall()

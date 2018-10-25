@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
@@ -17,7 +17,14 @@ def index():
 @socketio.on("add channel")
 def addChannel(data):
     channel = data["channel"]
-    #print("a user tried to add: ")
-    #print(data)
-    channels.append(channel)
-    emit("announce channels", channels, broadcast=True)
+    if channel in channels:
+        emit("announce channels", {"success": False, "channels": channels});
+    else:
+        channels.append(channel)
+        chans = {"success":True, "channels": channels}
+        emit("announce channels", chans, broadcast=True)
+
+@app.route("/api/get-list", methods=["GET"])
+def apiGetList():
+    print("inside api")
+    return jsonify({"existing_channels": channels})

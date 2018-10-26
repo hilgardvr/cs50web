@@ -23,6 +23,7 @@ function addChannels (channels) {
     }
 }
 
+//creates div and inserts into DOM
 function createChatDiv (user, message) {
     const div = document.createElement('div');
     div.innerHTML = "<p>" + user + "</p>" + "<p>" + message + "</p>";
@@ -30,14 +31,16 @@ function createChatDiv (user, message) {
     document.querySelector("#chat_div").appendChild(div);
 }
 
+//lists channel chat with helper function createChatDiv
 function listChat (channel) {
-    //console.log("inside list");
     document.querySelector("#chat_div").innerHTML = "";
-    for (let key in channel) {
-        const user = key;
-        const msg = channel[user];
-        createChatDiv(user, msg);
-    }
+    channel.forEach(e => {
+        const user = e.user;
+        const message = e.message;
+        const date = e.date;
+        console.log(" user: " + user + " msg: " + message + " date: " + date);
+        createChatDiv(user, message);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -89,14 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const channel_name = document.querySelector("#channel_name").value;
             document.querySelector("#channel_name").value = "";
             socket.emit('add channel', {'channel': channel_name});
-            //socket.emit('add channel', {'channel': channel_name, 'user': localStorage.getItem("username"), 'date': Date()} );
         }
 
         //add new message submission
         document.querySelector('#add_message_form').onsubmit = e => {
             e.preventDefault();
             const channel = document.querySelector('#channel_list').value;
-            console.log("channel: " + channel);
             const user = localStorage.getItem('username');
             const message = document.querySelector('#message').value;
             const date = Date();
@@ -105,13 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    //receive new channel data via socket
+    //receive new data via socket
     socket.on('announce channels', data => {
         document.querySelector("#channel_list").innerHTML = "";
         if (data.success) {
             addChannels(data.channels);
-            console.log(data.channels.random);
-            //listChat(data.channelsdocument.querySelector("#channel_list").value);
+            const chan = document.querySelector("#channel_list").value;
+            console.log(chan + " channel data: ");
+            console.log(data.channels[chan]);
+            listChat(data.channels[chan]);
         } else {
             alert("Channel/message couldn't be created");
             addChannels(data.channels);

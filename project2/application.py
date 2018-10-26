@@ -29,9 +29,7 @@ def addChannel(data):
     if channel in channels:
         emit("announce channels", {"success": False, "channels": channels});
     else:
-        #print("user: " + data['user'] + "date: " + data['date'])
         channels[channel] = []
-        #{"the_user": "the_message"}
         chans = {"success":True, "channels": channels}
         emit("announce channels", chans, broadcast=True)
 

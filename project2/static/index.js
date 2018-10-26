@@ -12,11 +12,32 @@ function removeUser () {
 }
 
 function addChannels (channels) {
-    channels.forEach(item => {
-        const li = document.createElement('li');
-        li.innerHTML = item;
-        document.querySelector("#channel_list").append(li);
-    });
+    for (let key in channels) {
+        const option = document.createElement('option');
+        option.innerHTML = key;
+        document.querySelector("#channel_list").add(option);
+        /*for (let user in channels[key]) {
+            console.log(user + ": " + channels[key][user]);
+            createChatDiv(user, channels[key][user]);
+        }*/
+    }
+}
+
+function createChatDiv (user, message) {
+    const div = document.createElement('div');
+    div.innerHTML = "<p>" + user + "</p>" + "<p>" + message + "</p>";
+    div.setAttribute('class', 'container');
+    document.querySelector("#chat_div").appendChild(div);
+}
+
+function listChat (channel) {
+    console.log("inside list");
+    document.querySelector("#chat_div").innerHTML = "";
+    for (let key in channel) {
+        const user = key;
+        const msg = channel[user];
+        createChatDiv(user, msg);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -36,6 +57,18 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('username', name);
         changeHidden(name);
     };
+
+    document.querySelector("#channel_list").onchange = e => {
+        console.log(e.target.value);
+        const chan = e.target.value;
+        const request = new XMLHttpRequest();
+        request.open('GET', '/api/get-list');
+        request.onload = () => {
+            const channel = JSON.parse(request.responseText).existing_channels;
+            listChat(channel[chan]);
+        }
+        request.send();
+    }
 
     const request = new XMLHttpRequest();
     request.open('GET', '/api/get-list');

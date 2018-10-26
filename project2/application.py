@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
-channels = []
+channels = {}
 
 @app.route("/")
 def index():
@@ -20,11 +20,10 @@ def addChannel(data):
     if channel in channels:
         emit("announce channels", {"success": False, "channels": channels});
     else:
-        channels.append(channel)
+        channels[channel] = {"the_user": "the_message"}
         chans = {"success":True, "channels": channels}
         emit("announce channels", chans, broadcast=True)
 
 @app.route("/api/get-list", methods=["GET"])
 def apiGetList():
-    print("inside api")
     return jsonify({"existing_channels": channels})

@@ -31,7 +31,7 @@ function createChatDiv (user, message) {
 }
 
 function listChat (channel) {
-    console.log("inside list");
+    //console.log("inside list");
     document.querySelector("#chat_div").innerHTML = "";
     for (let key in channel) {
         const user = key;
@@ -80,21 +80,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
+    //on successfull socket connection
     socket.on('connect', () => {
+
+        //add new channel submission
         document.querySelector('#add_channel_form').onsubmit = e => {
             e.preventDefault();
             const channel_name = document.querySelector("#channel_name").value;
             document.querySelector("#channel_name").value = "";
             socket.emit('add channel', {'channel': channel_name});
+            //socket.emit('add channel', {'channel': channel_name, 'user': localStorage.getItem("username"), 'date': Date()} );
+        }
+
+        //add new message submission
+        document.querySelector('#add_message_form').onsubmit = e => {
+            e.preventDefault();
+            const channel = document.querySelector('#channel_list').value;
+            console.log("channel: " + channel);
+            const user = localStorage.getItem('username');
+            const message = document.querySelector('#message').value;
+            const date = Date();
+            document.querySelector('#message').value = "";
+            socket.emit('add message', {'channel': channel, 'user': user, 'message': message, 'date': date});
         }
     });
 
+    //receive new channel data via socket
     socket.on('announce channels', data => {
         document.querySelector("#channel_list").innerHTML = "";
         if (data.success) {
             addChannels(data.channels);
+            console.log(data.channels.random);
+            //listChat(data.channelsdocument.querySelector("#channel_list").value);
         } else {
-            alert("Channel couldn't be created");
+            alert("Channel/message couldn't be created");
             addChannels(data.channels);
         }
     });

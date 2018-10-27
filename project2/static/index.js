@@ -1,9 +1,11 @@
+//shows hidden channel & chat info on submission of name
 function changeHidden (name) {
     document.querySelector('#set_name_div').style.display = 'none'
     document.querySelector('#name_set').style.display = 'block'
     document.querySelector('#name_span').innerHTML = name;
 }
 
+//deletes username from local storage
 function removeUser () {
     console.log("user wants to be forgotten");
     localStorage.removeItem('username');
@@ -11,22 +13,20 @@ function removeUser () {
     document.querySelector('#name_set').style.display = 'none';
 }
 
+//add a new channels
 function addChannels (channels) {
+    const select = document.querySelector("#channel_list");
     for (let key in channels) {
         const option = document.createElement('option');
         option.innerHTML = key;
-        document.querySelector("#channel_list").add(option);
-        /*for (let user in channels[key]) {
-            console.log(user + ": " + channels[key][user]);
-            createChatDiv(user, channels[key][user]);
-        }*/
+        select.add(option);
     }
 }
 
 //creates div and inserts into DOM
-function createChatDiv (user, message) {
+function createChatDiv (user, message, date) {
     const div = document.createElement('div');
-    div.innerHTML = "<p>" + user + "</p>" + "<p>" + message + "</p>";
+    div.innerHTML = "<p>" + user + "</p>" + "<p>" + message + "</p>" + "<p>" + date + "</p>";
     div.setAttribute('class', 'container');
     document.querySelector("#chat_div").appendChild(div);
 }
@@ -38,12 +38,13 @@ function listChat (channel) {
         const user = e.user;
         const message = e.message;
         const date = e.date;
-        console.log(" user: " + user + " msg: " + message + " date: " + date);
-        createChatDiv(user, message);
+        createChatDiv(user, message, date);
     });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    //check if username has been saved before - prompt for username in not
     let name = localStorage.getItem('username');
     if (!name) {
         document.querySelector('#set_name_div').style.display = 'block';
@@ -54,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#name_span').innerHTML = name;
     }
 
+    //save username in localstorage on submission
     document.querySelector('#set_name_form').onsubmit = e => {
         e.preventDefault();
         const name = document.querySelector('#name').value;
@@ -61,23 +63,29 @@ document.addEventListener('DOMContentLoaded', () => {
         changeHidden(name);
     };
 
+    //load channel chat messages on change of channel
     document.querySelector("#channel_list").onchange = e => {
-        console.log(e.target.value);
         const chan = e.target.value;
         const request = new XMLHttpRequest();
         request.open('GET', '/api/get-list');
         request.onload = () => {
-            const channel = JSON.parse(request.responseText).existing_channels;
-            listChat(channel[chan]);
+            const channels = JSON.parse(request.responseText).existing_channels;
+            listChat(channels[chan]);
         }
         request.send();
     }
 
+    //get existing channels
     const request = new XMLHttpRequest();
     request.open('GET', '/api/get-list');
     request.onload = () => {
         const channels = JSON.parse(request.responseText).existing_channels;
         addChannels(channels);
+        const currentChannel = document.querySelector('#channel_list').value;
+        //console.log("curr: " + currentChannel);
+        if (currentChannel) {
+            listChat(channels[currentChannel]);
+        }
     }
     request.send();
 
@@ -106,18 +114,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    //receive new data via socket
-    socket.on('announce channels', data => {
-        document.querySelector("#channel_list").innerHTML = "";
+    //receive new channel data
+    socket.on('announce channel', data => {
         if (data.success) {
-            addChannels(data.channels);
-            const chan = document.querySelector("#channel_list").value;
-            console.log(chan + " channel data: ");
-            console.log(data.channels[chan]);
-            listChat(data.channels[chan]);
+            const option = document.createElement('option');
+            option.innerHTML = data.channel;
+            document.querySelector("#channel_list").add(option);
         } else {
-            alert("Channel/message couldn't be created");
-            addChannels(data.channels);
+            alert("Channel couldn't be created");
+        }
+    });
+
+    //receive new message data
+    socket.on('announce message', data => {
+        if (data.success) {
+            if (document.querySelector('#channel_list').value === data.channel) {
+                createChatDiv(data.message.user, data.message.message, data.message.date);
+            }
         }
     });
 })

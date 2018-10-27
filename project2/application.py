@@ -9,12 +9,6 @@ socketio = SocketIO(app)
 
 channels = {}
 
-class Message:
-    def __init__(self, user, msg, time):
-        self.user = user
-        self.msg = msg
-        self.time = time
-
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -27,16 +21,17 @@ def apiGetList():
 def addChannel(data):
     channel = data["channel"]
     if channel in channels:
-        emit("announce channels", {"success": False, "channels": channels});
+        emit("announce channel", {"success": False, "channel": channel});
     else:
         channels[channel] = []
-        chans = {"success":True, "channels": channels}
-        emit("announce channels", chans, broadcast=True)
+        chans = {"success":True, "channel": channel}
+        emit("announce channel", chans, broadcast=True)
 
 @socketio.on("add message")
 def addMessage(data):
     channelToAddTo = data["channel"]
-    channels[channelToAddTo].append({"user": data['user'], "message": data['message'], "date": data['date']})
-    print(channels)
-    chans = {"success":True, "channels": channels}
-    emit("announce channels", chans, broadcast=True)
+    message = {"user": data['user'], "message": data['message'], "date": data['date']}
+    channels[channelToAddTo].append(message)
+    #print(channels)
+    chans = {"success":True, "channel": channelToAddTo, "message": message}
+    emit("announce message", chans, broadcast=True)

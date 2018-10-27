@@ -26,11 +26,21 @@
             <input id="channel_name" autocomplete="off" placeholder="Add new channel" type="text">
             <input type="submit">
         </form>
+
         <h2>Channels</h2>
         <form>
             <select id="channel_list">
             </select>
         </form>
+        <p>
+            Channel Status: <span id="channel_status_text">Not Set</span><br>
+            Updated By: <span id="channel_status_user">Not Updated</span>
+        </p>
+        <form id="channel_status_form">
+            <input id="channel_status_field" autocomplete="off" placeholder="Change the channel status" type="text">
+            <input type="submit">
+        </form>
+
         <h2>Chat</h2>
         <form id="add_message_form">
             <input id="message" autocomplete="off" placeholder="Send new message" type="text">

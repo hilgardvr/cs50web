@@ -41,6 +41,14 @@ function listChat (channel) {
     });
 }
 
+//updates the channel status value and user that updated it
+function changeStatus() {
+    const status = document.querySelector("#channel_status_field").value;
+    const user = localStorage.getItem('username');
+    document.querySelector("#channel_status_text").innerHTML = status;
+    document.querySelector("#channel_status_user").innerHTML = user;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     //check if username has been saved before - prompt for username in not
@@ -74,6 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         request.send();
     }
+
+    //add callback to channel status
+    document.querySelector("#channel_status_form").onsubmit = e => {
+        e.preventDefault();
+        changeStatus();
+    };
 
     //get existing channels
     const request = new XMLHttpRequest();
@@ -134,6 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (document.querySelector('#channel_list').value === data.channel) {
                 createChatDiv(data.message.user, data.message.message, data.message.date);
             }
+        } else {
+            alert("Empty message can't be sent");
         }
     });
 })

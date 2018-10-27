@@ -7,7 +7,6 @@ function changeHidden (name) {
 
 //deletes username from local storage
 function removeUser () {
-    console.log("user wants to be forgotten");
     localStorage.removeItem('username');
     document.querySelector('#set_name_div').style.display = 'block';
     document.querySelector('#name_set').style.display = 'none';
@@ -26,7 +25,7 @@ function addChannels (channels) {
 //creates div and inserts into DOM
 function createChatDiv (user, message, date) {
     const div = document.createElement('div');
-    div.innerHTML = "<p>" + user + "</p>" + "<p>" + message + "</p>" + "<p>" + date + "</p>";
+    div.innerHTML = "<p><b>" + user + "</b></p>" + "<p>" + message + "</p>" + "<p class='time-right'>" + date + "</p>";
     div.setAttribute('class', 'container');
     document.querySelector("#chat_div").appendChild(div);
 }
@@ -71,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         request.onload = () => {
             const channels = JSON.parse(request.responseText).existing_channels;
             listChat(channels[chan]);
+            localStorage.setItem('channel', chan);
         }
         request.send();
     }
@@ -81,8 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
     request.onload = () => {
         const channels = JSON.parse(request.responseText).existing_channels;
         addChannels(channels);
+        oldChannel = localStorage.getItem('channel');
+        if (oldChannel) {
+            console.log("old channel to change to: " + oldChannel);
+        }
         const currentChannel = document.querySelector('#channel_list').value;
-        //console.log("curr: " + currentChannel);
         if (currentChannel) {
             listChat(channels[currentChannel]);
         }

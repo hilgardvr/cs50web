@@ -31,7 +31,9 @@ def addChannel(data):
 def addMessage(data):
     channelToAddTo = data["channel"]
     message = {"user": data['user'], "message": data['message'], "date": data['date']}
+    maxMsgs = 100
+    if len(channels[channelToAddTo]) >= maxMsgs:
+        channels[channelToAddTo].pop(0)
     channels[channelToAddTo].append(message)
-    #print(channels)
     chans = {"success":True, "channel": channelToAddTo, "message": message}
     emit("announce message", chans, broadcast=True)

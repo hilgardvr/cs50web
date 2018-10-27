@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addChannels(channels);
         oldChannel = localStorage.getItem('channel');
         if (oldChannel) {
-            console.log("old channel to change to: " + oldChannel);
+            document.querySelector('#channel_list').value = oldChannel;
         }
         const currentChannel = document.querySelector('#channel_list').value;
         if (currentChannel) {

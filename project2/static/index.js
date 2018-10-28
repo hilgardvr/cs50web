@@ -42,9 +42,7 @@ function listChat (channel) {
 }
 
 //updates the channel status value and user that updated it
-function changeStatus() {
-    const status = document.querySelector("#channel_status_field").value;
-    const user = localStorage.getItem('username');
+function changeStatus(status, name) {
     document.querySelector("#channel_status_text").innerHTML = status;
     document.querySelector("#channel_status_user").innerHTML = user;
 }
@@ -83,11 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
         request.send();
     }
 
-    //add callback to channel status
+    /*add callback to channel status
     document.querySelector("#channel_status_form").onsubmit = e => {
         e.preventDefault();
         changeStatus();
-    };
+    };*/
 
     //get existing channels
     const request = new XMLHttpRequest();
@@ -100,14 +98,30 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#channel_list').value = oldChannel;
         }
         const currentChannel = document.querySelector('#channel_list').value;
+
+        //if a channel is set list chat messages and get channel status
         if (currentChannel) {
+
             listChat(channels[currentChannel]);
+
+            //get channel status
+            const statusRequest = new XMLHttpRequest();
+            statusRequest.open('GET','/api/get-status');
+            statusRequest.onload = () => {
+                const channelStatus = JSON.parse(statusRequest.responseText).statusses;
+                for (let channel in channelStatus) {
+                    if (channel.channel === currentChannel) {
+                        changeStatus(channel.status, channel.user)
+                    }
+                }
+            }
+            statusRequest.send();
         }
     }
     request.send();
 
+    //connect websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-
     //on successfull socket connection
     socket.on('connect', () => {
 

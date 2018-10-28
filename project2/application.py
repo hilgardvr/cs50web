@@ -19,7 +19,7 @@ class Channel:
         return self.name == other.name
 
 channels = {}
-#channels = []
+channelStatus = []
 
 @app.route("/")
 def index():
@@ -28,6 +28,10 @@ def index():
 @app.route("/api/get-list", methods=["GET"])
 def apiGetList():
     return jsonify({"existing_channels": channels})
+
+@app.route("/api/get-status", methods=["GET"])
+def apiGetStatus():
+    return jsonify({"statusses": channelStatus})
 
 @socketio.on("add channel")
 def addChannel(data):
@@ -66,3 +70,9 @@ def addMessage(data):
 @socketio.on("set channel status")
 def setChannelStatus(data):
     channel = data["channel"]
+    status = data["status"]
+    user = data["user"]
+    updateStatus = {"channel": channel, "status": status, "user": user}
+    channelStatus[channel] = updateStatus
+    print(channelStatus)
+    emit("set channel status", updateStatus, broadcast=True)

@@ -7,19 +7,8 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
-
-class Channel:
-    def __init__(self, name):
-        self.name = name
-        self.messages = {}
-        self.status = "Not Set"
-        self.user = "Not Updated"
-
-    def __eq__(self, other):
-        return self.name == other.name
-
 channels = {}
-channelStatus = []
+channelStatus = {}
 
 @app.route("/")
 def index():
@@ -31,7 +20,7 @@ def apiGetList():
 
 @app.route("/api/get-status", methods=["GET"])
 def apiGetStatus():
-    return jsonify({"statusses": channelStatus})
+    return jsonify({"statuses": channelStatus})
 
 @socketio.on("add channel")
 def addChannel(data):
@@ -42,16 +31,6 @@ def addChannel(data):
         channels[channel] = []
         chans = {"success":True, "channel": channel}
         emit("announce channel", chans, broadcast=True)
-
-#@socketio.on("add channel")
-#def addChannel(data):
-#    channel = Channel(data["channel"])
-#    if channel in channels:
-#        emit("announce channel", {"success": False, "channel": channel});
-#    else:
-#        channels.append(channel)
-#        chans = {"success":True, "channel": channel}
-#        emit("announce channel", chans, broadcast=True)
 
 @socketio.on("add message")
 def addMessage(data):
@@ -74,5 +53,4 @@ def setChannelStatus(data):
     user = data["user"]
     updateStatus = {"channel": channel, "status": status, "user": user}
     channelStatus[channel] = updateStatus
-    print(channelStatus)
     emit("set channel status", updateStatus, broadcast=True)

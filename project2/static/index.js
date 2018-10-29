@@ -44,7 +44,7 @@ function listChat (channel) {
 //updates the channel status value and user that updated it
 function changeStatus(status, name) {
     document.querySelector("#channel_status_text").innerHTML = status;
-    document.querySelector("#channel_status_user").innerHTML = user;
+    document.querySelector("#channel_status_user").innerHTML = name;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -77,15 +77,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const channels = JSON.parse(request.responseText).existing_channels;
             listChat(channels[chan]);
             localStorage.setItem('channel', chan);
+
+            //get channel status
+            const statusRequest = new XMLHttpRequest();
+            statusRequest.open('GET','/api/get-status');
+            statusRequest.onload = () => {
+                const channelStatus = JSON.parse(statusRequest.responseText).statuses;
+                if (chan in channelStatus) {
+                    changeStatus(channelStatus[chan].status, channelStatus[chan].user);
+                } else {
+                    changeStatus("Not Set", "Not Updated");
+                }
+            }
+            statusRequest.send()
         }
         request.send();
     }
-
-    /*add callback to channel status
-    document.querySelector("#channel_status_form").onsubmit = e => {
-        e.preventDefault();
-        changeStatus();
-    };*/
 
     //get existing channels
     const request = new XMLHttpRequest();
@@ -108,11 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const statusRequest = new XMLHttpRequest();
             statusRequest.open('GET','/api/get-status');
             statusRequest.onload = () => {
-                const channelStatus = JSON.parse(statusRequest.responseText).statusses;
-                for (let channel in channelStatus) {
-                    if (channel.channel === currentChannel) {
-                        changeStatus(channel.status, channel.user)
-                    }
+                const channelStatus = JSON.parse(statusRequest.responseText).statuses;
+                if (currentChannel in channelStatus) {
+                    changeStatus(channelStatus[currentChannel].status, channelStatus[currentChannel].user);
+                } else {
+                    changeStatus("Not Set", "Not Updated");
                 }
             }
             statusRequest.send();
@@ -143,6 +150,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#message').value = "";
             socket.emit('add message', {'channel': channel, 'user': user, 'message': message, 'date': date});
         }
+
+        //add event listener for channel status
+        document.querySelector('#channel_status_form').onsubmit = e => {
+            e.preventDefault();
+            const channel = document.querySelector('#channel_list').value;
+            const status = document.querySelector('#channel_status_field').value;
+            const user = localStorage.getItem('username');
+            document.querySelector('#channel_status_field').value = "";
+            socket.emit('set channel status', {'channel': channel, 'status': status, 'user': user});
+        }
     });
 
     //receive new channel data
@@ -164,6 +181,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             alert("Empty message can't be sent");
+        }
+    });
+
+    //change channel status if current channel has a new status
+    socket.on('set channel status', data => {
+        thisChannel = document.querySelector('#channel_list').value;
+        if (thisChannel == data.channel) {
+            changeStatus(data.status, data.user);
         }
     });
 })

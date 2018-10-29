@@ -7,3 +7,5 @@ A very barebones single page Slack like app with the following files:
 - template/index.html: Basic html layout for index page
 - static/index.js: Page containing majority of logic including what is rendered, retrieving info from backend via api/socket and sending info to backend
 - static/style.css: Basic styling for messages
+
+- Personal touch: Channels' status' can be set/updated and the app remembers the status and user who updated the status 

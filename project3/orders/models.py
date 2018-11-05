@@ -5,7 +5,7 @@ class Size(models.Model):
     size = models.CharField(max_length=63)
 
     def __str__(self):
-        return f"{self.size} - {self.code}"
+        return f"{self.size}"
 
 class PizzaType(models.Model):
     pizzaType = models.CharField(max_length=63)
@@ -13,7 +13,7 @@ class PizzaType(models.Model):
     def __str__(self):
         return f"{self.pizzaType}"
 
-class Topping(models.Model):
+class PizzaTopping(models.Model):
     topping = models.CharField(max_length=63) 
 
     def __str__(self):
@@ -23,42 +23,48 @@ class Pizza(models.Model):
     pizza = models.CharField(max_length=63)
     pizzaType = models.ForeignKey(PizzaType, on_delete=models.CASCADE, related_name="pizza_type")
     size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name="pizza_size")
-    pizzaToppings = models.ManyToManyField(Topping, blank=True, related_name="pizza_toppings")
+    price = models.FloatField(default=0)
+    pizzaToppings = models.ManyToManyField(PizzaTopping, blank=True, related_name="pizza_toppings")
 
     def __str__(self):
-        return f"{self.pizzaType} {self.pizza} - Toppings: {self.pizzaToppings}"
+        return f"\n{self.pizzaType} {self.size} {self.pizza} - Price: ${self.price}"
 
 class SubExtra(models.Model):
     subExtra = models.CharField(max_length=63)
+    price = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.subExtra}"
+        return f"{self.subExtra} - Price: ${self.price}"
 
 class Sub(models.Model):
     sub = models.CharField(max_length=63)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name="sub_size")
+    price = models.FloatField(default=0)
     subExtra = models.ManyToManyField(SubExtra, blank=True, related_name="sub_extra")
 
     def __str__(self):
-        return f"{self.sub}"
+        return f"{self.sub} - Price: ${self.price}"
 
 class Pasta(models.Model):
     pasta = models.CharField(max_length=63)
+    price = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.pasta}"
+        return f"{self.pasta} - Price: ${self.price}"
 
 class Salad(models.Model):
     salad = models.CharField(max_length=63)
+    price = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.salad}"
+        return f"{self.salad} - Price: ${self.price}"
 
 class Platter(models.Model):
     platter = models.CharField(max_length=63)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name="platter_size")
+    price = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.platter}"
+        return f"{self.platter} - Price: ${self.price}"
 
 # Create your models here.

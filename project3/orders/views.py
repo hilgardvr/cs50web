@@ -53,6 +53,6 @@ def register_view(request):
         user.last_name = last_name
         user.save()
         login(request, user)
-        return render(request, "orders/login.html", { "message": "You have been registered"})
+        return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "orders/login.html", { "message": "Invalid signup credentials"})

@@ -12,48 +12,48 @@
 
     <h4>Pizza's</h4>
     {% for pizza in pizzas %}
-        <li>{{ pizza }}</li>
+        <li data-set>{{ pizza }}<button>Add to cart</button></li>
     {% endfor %}       
 
     <h4>Pizza Toppings</h4>
     <ul>
         {% for topping in toppings %} 
-            <li>{{ topping }}</li>
+            <li>{{ topping }}<button>Add to cart</button><button>Add to cart</button></li>
         {% endfor %}
     </ul>
 
     <h4>Subs</h4>
     <ul>
         {% for sub in subs %}
-            <li>{{ sub }}</li>
+            <li>{{ sub }}<button>Add to cart</button></li>
         {% endfor %}
     </ul>
 
     <h4>Sub Extras</h4>
     <ul>
         {% for extra in subextras %}
-            <li>{{ extra }}</li>
+            <li>{{ extra }}<button>Add to cart</button></li>
         {% endfor %}
     </ul>
 
     <h4>Pasta</h4>
     <ul>
         {% for pasta in pastas %}
-            <li>{{ pasta }}</li>
+            <li>{{ pasta }}<button>Add to cart</button></li>
         {% endfor %}
     </ul>
 
     <h4>Salad</h4>
     <ul>
         {% for salad in salads %}
-            <li>{{ salad }}</li>
+            <li>{{ salad }}<button>Add to cart</button></li>
         {% endfor %}
     </ul>
     
     <h4>Dinner Platters</h4>
     <ul>
         {% for platter in platters %}
-            <li>{{ platter }}</li>
+            <li>{{ platter }}<button>Add to cart</button></li>
         {% endfor %}
     </ul>
 {% endblock %}

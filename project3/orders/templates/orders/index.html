@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Pinocchio Menu</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
-</head>
-<body>
-    <h2>Pinocchio's Pizza & Subs</h2>
+{% extends 'orders/base.html' %}
+{% block title %}
+    Pinocchio Menu
+{% endblock %}
+
+{% block body %}
+    <h2>Welcome {{ user }} to Pinocchio's Pizza & Subs</h2>
+
+    <a href="{% url 'logout' %}" style="float: right">Logout</a>
 
     <h3>Menu</h3>
 
@@ -20,56 +17,43 @@
 
     <h4>Pizza Toppings</h4>
     <ul>
-        {% for topping in toppings %}
-        
+        {% for topping in toppings %} 
             <li>{{ topping }}</li>
-
         {% endfor %}
     </ul>
 
     <h4>Subs</h4>
     <ul>
         {% for sub in subs %}
-        
             <li>{{ sub }}</li>
-
         {% endfor %}
     </ul>
 
     <h4>Sub Extras</h4>
     <ul>
         {% for extra in subextras %}
-        
             <li>{{ extra }}</li>
-
         {% endfor %}
     </ul>
 
     <h4>Pasta</h4>
     <ul>
         {% for pasta in pastas %}
-        
             <li>{{ pasta }}</li>
-
         {% endfor %}
     </ul>
 
     <h4>Salad</h4>
     <ul>
         {% for salad in salads %}
-        
             <li>{{ salad }}</li>
-
         {% endfor %}
     </ul>
     
     <h4>Dinner Platters</h4>
     <ul>
         {% for platter in platters %}
-        
             <li>{{ platter }}</li>
-
         {% endfor %}
     </ul>
-</body>
-</html>
+{% endblock %}

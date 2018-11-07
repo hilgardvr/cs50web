@@ -10,50 +10,53 @@
 
     <h3>Menu</h3>
 
+    <h3>My Cart</h3>
+    <ul id="cart"></ul>
+
     <h4>Pizza's</h4>
     {% for pizza in pizzas %}
-        <li data-set>{{ pizza }}<button>Add to cart</button></li>
+        <li data-set>{{ pizza }}<button data-pizza="{{ pizza }}">Add to cart</button></li>
     {% endfor %}       
 
     <h4>Pizza Toppings</h4>
     <ul>
         {% for topping in toppings %} 
-            <li>{{ topping }}<button>Add to cart</button><button>Add to cart</button></li>
+            <li>{{ topping }}<button data-pizza="{{ topping }}">Add to cart</button>
         {% endfor %}
     </ul>
 
     <h4>Subs</h4>
     <ul>
         {% for sub in subs %}
-            <li>{{ sub }}<button>Add to cart</button></li>
+            <li>{{ sub }}<button data-pizza="{{ sub }}">Add to cart</button></li>
         {% endfor %}
     </ul>
 
     <h4>Sub Extras</h4>
     <ul>
         {% for extra in subextras %}
-            <li>{{ extra }}<button>Add to cart</button></li>
+            <li>{{ extra }}<button data-pizza="{{ extra }}">Add to cart</button></li>
         {% endfor %}
     </ul>
 
     <h4>Pasta</h4>
     <ul>
         {% for pasta in pastas %}
-            <li>{{ pasta }}<button>Add to cart</button></li>
+            <li>{{ pasta }}<button data-pizza="{{ pasta }}">Add to cart</button></li>
         {% endfor %}
     </ul>
 
     <h4>Salad</h4>
     <ul>
         {% for salad in salads %}
-            <li>{{ salad }}<button>Add to cart</button></li>
+            <li>{{ salad }}<button data-pizza="{{ salad }}">Add to cart</button></li>
         {% endfor %}
     </ul>
     
     <h4>Dinner Platters</h4>
     <ul>
         {% for platter in platters %}
-            <li>{{ platter }}<button>Add to cart</button></li>
+            <li>{{ platter }}<button data-pizza="{{ platter }}">Add to cart</button></li>
         {% endfor %}
     </ul>
 {% endblock %}

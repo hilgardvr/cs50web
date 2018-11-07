@@ -11,7 +11,17 @@
     <h3>Menu</h3>
 
     <h3>My Cart</h3>
+
+    <div id="getToppings">
+        <h3>Select Toppings</h3>
+        
+    </div>
+
     <ul id="cart"></ul>
+    <div id="checkout">
+        <button id='submitCart'>Checkout</button>
+        <button id='clearCart'>Clear Cart</button>
+    </div>
 
     <h4>Pizza's</h4>
     {% for pizza in pizzas %}
@@ -21,7 +31,7 @@
     <h4>Pizza Toppings</h4>
     <ul>
         {% for topping in toppings %} 
-            <li>{{ topping }}<button data-pizza="{{ topping }}">Add to cart</button>
+            <li>{{ topping }}<!--button data-pizza="{{ topping }}">Add to cart</button-->
         {% endfor %}
     </ul>
 
@@ -35,7 +45,7 @@
     <h4>Sub Extras</h4>
     <ul>
         {% for extra in subextras %}
-            <li>{{ extra }}<button data-pizza="{{ extra }}">Add to cart</button></li>
+            <li>{{ extra }}<!--button data-pizza="{{ extra }}">Add to cart</button></li-->
         {% endfor %}
     </ul>
 

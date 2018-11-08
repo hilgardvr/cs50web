@@ -3,6 +3,10 @@
     Pinocchio Menu
 {% endblock %}
 
+{% block script %}
+    <script src="../../static/orders/main.js"></script>
+{% endblock %}
+
 {% block body %}
     <h2>Welcome {{ user }} to Pinocchio's Pizza & Subs</h2>
 
@@ -12,15 +16,23 @@
 
     <h3>My Cart</h3>
 
-    <div id="getToppings">
-        <h3>Select Toppings</h3>
-        
-    </div>
-
     <ul id="cart"></ul>
     <div id="checkout">
         <button id='submitCart'>Checkout</button>
         <button id='clearCart'>Clear Cart</button>
+    </div>
+
+    <div id="getToppings">
+        <h3>Select Toppings</h3>
+        <form action="{% url 'login' %}">
+            {% for topping in toppings %}
+                <input type="checkbox" name="topping_selection" value="{{ topping }}" 
+                onclick="return keepCount()" class="chk">
+                    {{ topping }}
+                <br>
+            {% endfor %} 
+            <input type="submit" value="Submit">
+        </form>
     </div>
 
     <h4>Pizza's</h4>

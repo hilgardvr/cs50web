@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Size(models.Model):
     code = models.CharField(max_length=7)
@@ -66,5 +67,13 @@ class Platter(models.Model):
 
     def __str__(self):
         return f"{self.platter} - Price: ${self.price}"
+
+class Orders(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    pizza = models.ManyToManyField(Pizza, blank=True, related_name="order_pizza")
+    sub = models.ManyToManyField(Sub, blank=True, related_name="order_sub")
+    salad = models.ManyToManyField(Salad, blank=True, related_name="order_salad")
+    platter = models.ManyToManyField(Platter, blank=True, related_name="order_platter")
+    checkedout = models.BooleanField(default=False)
 
 # Create your models here.

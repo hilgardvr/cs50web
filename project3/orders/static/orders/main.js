@@ -2,6 +2,7 @@ function clearLocal() {
     localStorage.removeItem('cart');
     cart = document.querySelector("#cart");
     cart.innerHTML = "";
+    document.querySelector("#getToppings").style.display = "none";
 }
 
 function checkout() {
@@ -16,6 +17,15 @@ function checkout() {
 function getToppings(pizza) {
     document.querySelector("#getToppings").style.display = "block";
     const num = pizza.match(/\d/g).map(Number)[0];
+    console.log(num);
+}
+
+function keepCount() {
+    checked = document.querySelectorAll(".chk:checked");
+    if (checked.length > 3) {
+        console.log(this);
+        alert(this.window.pizza);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
             li = document.createElement('li');
             li.innerHTML = cartItem;
             cart.append(li);
-            console.log(cart);
         });
     } else {
         localCart = {

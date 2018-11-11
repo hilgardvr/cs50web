@@ -68,7 +68,7 @@ class Platter(models.Model):
     def __str__(self):
         return f"{self.platter} - Price: ${self.price}"
 
-class Orders(models.Model):
+class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     pizza = models.ManyToManyField(Pizza, blank=True, related_name="order_pizza")
     sub = models.ManyToManyField(Sub, blank=True, related_name="order_sub")

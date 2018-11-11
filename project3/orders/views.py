@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from orders.models import Size, PizzaType, PizzaTopping, Pizza, SubExtra, Sub, Pasta, Salad, Platter, Orders
+from orders.models import Size, PizzaType, PizzaTopping, Pizza, SubExtra, Sub, Pasta, Salad, Platter, Order
 
 # Create your views here.
 def index(request):
@@ -17,7 +17,8 @@ def index(request):
             "subextras": SubExtra.objects.all(),
             "pastas": Pasta.objects.all(),
             "salads": Salad.objects.all(),
-            "platters": Platter.objects.all()
+            "platters": Platter.objects.all(),
+            "orders": Order.objects.all()
         }
         return render(request, "orders/index.html", context)      
     else:
@@ -57,3 +58,7 @@ def register_view(request):
     else:
         return render(request, "orders/login.html", { "message": "Invalid signup credentials"})
 
+def add_to_order(request):
+    user = request.user
+    print(user.id)
+    return HttpResponse(user.id)

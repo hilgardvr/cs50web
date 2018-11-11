@@ -16,16 +16,40 @@ function checkout() {
 
 function getToppings(pizza) {
     document.querySelector("#getToppings").style.display = "block";
+    checked = document.querySelectorAll(".chk:checked");
+    console.log(pizza);
+    //const num = this.window.pizza.match(/\d/g).map(Number)[0];
     const num = pizza.match(/\d/g).map(Number)[0];
-    console.log(num);
+    if (checked.length === num) {
+        //console.log("selected:");
+        for (let check in checked) {
+            console.log(check);
+        }
+        addToOrder(pizza);
+        document.querySelector("#getToppings").style.display = "none";
+    }
+    //const num = pizza.match(/\d/g).map(Number)[0];
+    //console.log(num);
 }
 
-function keepCount() {
-    checked = document.querySelectorAll(".chk:checked");
-    if (checked.length > 3) {
-        console.log(this);
-        alert(this.window.pizza);
-    }
+function addToOrder(button) {
+    pizza = button.dataset.pizza;
+    const request = new XMLHttpRequest();
+        request.open("GET", "/add_to_order?" + pizza);
+        request.onload = () => {
+            const res = request.responseText;
+            alert("received from server: " + res);       
+            if (pizza.includes("Topping")) {
+                getToppings(pizza);
+            }
+            cart = document.querySelector("#cart");
+            li = document.createElement('li');
+            li.innerHTML = pizza;
+            cart.append(li);
+            /* localCart.cartArray.push(pizza)
+            localStorage.setItem('cart', JSON.stringify(localCart)); */
+        }
+        request.send();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -51,16 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (button.id == "clearCart") {
                 clearLocal();
             } else {
-                pizza = button.dataset.pizza;
-                if (pizza.includes("Topping")) {
-                    getToppings(pizza);
-                }
-                cart = document.querySelector("#cart");
-                li = document.createElement('li');
-                li.innerHTML = pizza;
-                cart.append(li);
-                localCart.cartArray.push(pizza)
-                localStorage.setItem('cart', JSON.stringify(localCart));
+                addToOrder(button)
             }
         }
     });

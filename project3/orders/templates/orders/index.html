@@ -16,7 +16,11 @@
 
     <h3>My Cart</h3>
 
-    <ul id="cart"></ul>
+    <ul id="cart">
+        {% for order in orders %}
+            <li>{{ order }}</li>
+        {% endfor %}
+    </ul>
     <div id="checkout">
         <button id='submitCart'>Checkout</button>
         <button id='clearCart'>Clear Cart</button>

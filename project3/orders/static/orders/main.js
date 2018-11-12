@@ -1,14 +1,3 @@
-let numToppings = 0;
-
-var item = {
-    product: "",
-    size: "",
-    pizzaType: "",
-
-    numToppings: 0,
-
-}
-
 function clearLocal() {
     localStorage.removeItem('cart');
     cart = document.querySelector("#cart");
@@ -25,48 +14,19 @@ function checkout() {
     }
 }
 
-function getToppings() {
-    checked = document.querySelectorAll(".chk:checked");
-    if (checked.length === numToppings) {
-        checked.forEach(e => {
-            console.log(e.value);
-            e.checked = false;
-        });
-        document.querySelector("#confirmItem").style.display = "none";
-    }
-}
-
-function showToppings(numTop) {
-    numToppings = numTop;
-    document.querySelector("#confirmItem").style.display = "block";
-}
-
 function addToOrder(button) {
-    item.product = button.dataset.product;
-    //console.log(pizza.pizza);
-    const request = new XMLHttpRequest();
-        request.open("GET", "/add_to_order");
-        const data = new FormData();
-        data.append("product", "pizza");
-        request.onload = () => {
-            const res = request.responseText;
-            alert("received from server: " + res);
-            if (product.includes("Topping")) {
-                showToppings(product.match(/\d/g).map(Number)[0]);
-            }
-            const cart = document.querySelector("#cart");
-            const li = document.createElement('li');
-            li.innerHTML = pizza;
-            cart.append(li);
-        }
-    request.send(data);
+    item = button.dataset.product;
+    const menuDiv = document.querySelector("#showMenu");
+    menuDiv.style.display = "none";
+    const itemDiv = document.querySelector("#confirmItem");
+    itemDiv.style.display = "block";
 }
 
 document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector("#confirmItem").style.display = "none";
-    let localCart = JSON.parse(localStorage.getItem('cart'));
-    if (localCart) {
+    let localCart = "todo - api get saved db order"
+    /* if (localCart) {
         localCart.cartArray.forEach(cartItem => {
             cart = document.querySelector("#cart");
             li = document.createElement('li');
@@ -77,7 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
         localCart = {
             cartArray: []
         }
-    }
+    } */
+    
     document.querySelectorAll('button').forEach(button => { 
         button.onclick = () => {
             if (button.id == "submitCart") {

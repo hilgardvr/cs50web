@@ -1,8 +1,19 @@
+let numToppings = 0;
+
+var item = {
+    product: "",
+    size: "",
+    pizzaType: "",
+
+    numToppings: 0,
+
+}
+
 function clearLocal() {
     localStorage.removeItem('cart');
     cart = document.querySelector("#cart");
     cart.innerHTML = "";
-    document.querySelector("#getToppings").style.display = "none";
+    document.querySelector("#confirmItem").style.display = "none";
 }
 
 function checkout() {
@@ -14,47 +25,46 @@ function checkout() {
     }
 }
 
-function getToppings(pizza) {
-    document.querySelector("#getToppings").style.display = "block";
+function getToppings() {
     checked = document.querySelectorAll(".chk:checked");
-    console.log(pizza);
-    //const num = this.window.pizza.match(/\d/g).map(Number)[0];
-    const num = pizza.match(/\d/g).map(Number)[0];
-    if (checked.length === num) {
-        //console.log("selected:");
-        for (let check in checked) {
-            console.log(check);
-        }
-        addToOrder(pizza);
-        document.querySelector("#getToppings").style.display = "none";
+    if (checked.length === numToppings) {
+        checked.forEach(e => {
+            console.log(e.value);
+            e.checked = false;
+        });
+        document.querySelector("#confirmItem").style.display = "none";
     }
-    //const num = pizza.match(/\d/g).map(Number)[0];
-    //console.log(num);
+}
+
+function showToppings(numTop) {
+    numToppings = numTop;
+    document.querySelector("#confirmItem").style.display = "block";
 }
 
 function addToOrder(button) {
-    pizza = button.dataset.pizza;
+    item.product = button.dataset.product;
+    //console.log(pizza.pizza);
     const request = new XMLHttpRequest();
-        request.open("GET", "/add_to_order?" + pizza);
+        request.open("GET", "/add_to_order");
+        const data = new FormData();
+        data.append("product", "pizza");
         request.onload = () => {
             const res = request.responseText;
-            alert("received from server: " + res);       
-            if (pizza.includes("Topping")) {
-                getToppings(pizza);
+            alert("received from server: " + res);
+            if (product.includes("Topping")) {
+                showToppings(product.match(/\d/g).map(Number)[0]);
             }
-            cart = document.querySelector("#cart");
-            li = document.createElement('li');
+            const cart = document.querySelector("#cart");
+            const li = document.createElement('li');
             li.innerHTML = pizza;
             cart.append(li);
-            /* localCart.cartArray.push(pizza)
-            localStorage.setItem('cart', JSON.stringify(localCart)); */
         }
-        request.send();
+    request.send(data);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    document.querySelector("#getToppings").style.display = "none";
+    document.querySelector("#confirmItem").style.display = "none";
     let localCart = JSON.parse(localStorage.getItem('cart'));
     if (localCart) {
         localCart.cartArray.forEach(cartItem => {
@@ -74,8 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 checkout();
             } else if (button.id == "clearCart") {
                 clearLocal();
-            } else {
+            } else if (button.className == "addToOrder") {
                 addToOrder(button)
+            } else {
+                console.log('no associated functionality..');
             }
         }
     });

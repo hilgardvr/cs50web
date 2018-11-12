@@ -26,12 +26,12 @@
         <button id='clearCart'>Clear Cart</button>
     </div>
 
-    <div id="getToppings">
+    <div id="confirmItem">
         <h3>Select Toppings</h3>
-        <form action="{% url 'login' %}">
+        <form action="{% url 'add_to_order' %}">
             {% for topping in toppings %}
                 <input type="checkbox" name="topping_selection" value="{{ topping }}" 
-                onclick="return keepCount()" class="chk">
+                onclick="return getToppings()" class="chk">
                     {{ topping }}
                 <br>
             {% endfor %} 
@@ -41,48 +41,48 @@
 
     <h4>Pizza's</h4>
     {% for pizza in pizzas %}
-        <li data-set>{{ pizza }}<button data-pizza="{{ pizza }}">Add to cart</button></li>
+        <li data-set>{{ pizza }}<button class="addToOrder" data-product="{{ pizza }}">Add to cart</button></li>
     {% endfor %}       
 
     <h4>Pizza Toppings</h4>
     <ul>
         {% for topping in toppings %} 
-            <li>{{ topping }}<!--button data-pizza="{{ topping }}">Add to cart</button-->
+            <li>{{ topping }}</li><!--button class="addToOrder" data-product="{{ topping }}">Add to cart</button-->
         {% endfor %}
     </ul>
 
     <h4>Subs</h4>
     <ul>
         {% for sub in subs %}
-            <li>{{ sub }}<button data-pizza="{{ sub }}">Add to cart</button></li>
+            <li>{{ sub }}<button class="addToOrder" data-product="{{ sub }}">Add to cart</button></li>
         {% endfor %}
     </ul>
 
     <h4>Sub Extras</h4>
     <ul>
         {% for extra in subextras %}
-            <li>{{ extra }}<!--button data-pizza="{{ extra }}">Add to cart</button></li-->
+            <li>{{ extra }}</li><!--button class="addToOrder" data-product="{{ extra }}">Add to cart</button></li-->
         {% endfor %}
     </ul>
 
     <h4>Pasta</h4>
     <ul>
         {% for pasta in pastas %}
-            <li>{{ pasta }}<button data-pizza="{{ pasta }}">Add to cart</button></li>
+            <li>{{ pasta }}<button class="addToOrder" data-product="{{ pasta }}">Add to cart</button></li>
         {% endfor %}
     </ul>
 
     <h4>Salad</h4>
     <ul>
         {% for salad in salads %}
-            <li>{{ salad }}<button data-pizza="{{ salad }}">Add to cart</button></li>
+            <li>{{ salad }}<button class="addToOrder" data-product="{{ salad }}">Add to cart</button></li>
         {% endfor %}
     </ul>
     
     <h4>Dinner Platters</h4>
     <ul>
         {% for platter in platters %}
-            <li>{{ platter }}<button data-pizza="{{ platter }}">Add to cart</button></li>
+            <li>{{ platter }}<button class="addToOrder" data-product="{{ platter }}">Add to cart</button></li>
         {% endfor %}
     </ul>
 {% endblock %}

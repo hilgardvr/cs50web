@@ -40,7 +40,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return render(request, "orders/login.html", { "message": "Logged out"})
+    return render(request, "orders/login.html", {"message": "Logged out"})
 
 def register_view(request):
     username = request.POST["username"]
@@ -60,5 +60,6 @@ def register_view(request):
 
 def add_to_order(request):
     user = request.user
-    print(user.id)
+    #product = request.POST["product"]
+    #print("User:" + str(user.id) + " Product: " + product)
     return HttpResponse(user.id)

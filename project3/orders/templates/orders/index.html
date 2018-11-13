@@ -9,21 +9,39 @@
 
 {% block body %}
 
-    <div id="confirmItem">
+    <div class="container" id="confirmItem">
         <h3>Confirm Item</h3>
         <form action="{% url 'add_to_order' %}" method="post">
             {% csrf_token %}
-            <!-- {% for topping in toppings %}
-                <input type="checkbox" name="topping_selection" value="{{ topping }}" 
-                onclick="return getToppings()" class="chk">
-                    {{ topping }}
-                <br>
-            {% endfor %}  -->
-            <input type="submit" value="Submit">
+            <div class="form-group row">
+                <div class="col-5">
+                    <div id="product_div">
+                        Product: <input class="form-control" type="text" name="product" id="product" readonly/><br/>
+                    </div>
+                    <div id="pizza_base_div">
+                        Pizza Base: <input class="form-control" type="text" name="pizza_base" id="pizzaType" readonly/><br/>
+                    </div>
+                    <div id="size_div">
+                        Size: <input class="form-control" type="text" name="size" id="size" readonly/><br/>
+                    </div>
+                    <div id="price_div">
+                        Price: <input class="form-control" type="text" name="price" id="price" readonly/><br/>
+                    </div>
+                    <div id="pizza_toppings">
+                        Toppings: (select <span id="num_toppings">0</span>)
+                        <select multiple id="pizza_toppings_select" size=10 onchange="checkNumToppings()">
+                        {% for topping in toppings %}
+                            <option value={{topping}} on>{{ topping }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <input type="submit" value="Submit">
+                </div>
+            </div>
         </form>
     </div>
 
-    <div id="showMenu">
+    <div class="container" id="showMenu">
         <h2>Welcome {{ user }} to Pinocchio's Pizza & Subs</h2>
 
         <a href="{% url 'logout' %}" style="float: right">Logout</a>
@@ -45,11 +63,11 @@
         <h4>Pizza's</h4>
         {% for pizza in pizzas %}
             <li data-set>{{ pizza }}<button class="addToOrder" data-product="{{ pizza }}">Add to cart</button></li>
-        {% endfor %}       
+        {% endfor %}
 
         <h4>Pizza Toppings</h4>
         <ul>
-            {% for topping in toppings %} 
+            {% for topping in toppings %}
                 <li>{{ topping }}</li><!--button class="addToOrder" data-product="{{ topping }}">Add to cart</button-->
             {% endfor %}
         </ul>

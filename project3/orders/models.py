@@ -28,7 +28,7 @@ class Pizza(models.Model):
     pizzaToppings = models.ManyToManyField(PizzaTopping, blank=True, related_name="pizza_toppings")
 
     def __str__(self):
-        return f"\n{self.pizzaType} {self.size} {self.pizza} - Price: ${self.price}"
+        return f"Pizza {self.pizzaType} {self.size} {self.pizza} - Price: $ {self.price}"
 
 class SubExtra(models.Model):
     subExtra = models.CharField(max_length=63)
@@ -44,21 +44,21 @@ class Sub(models.Model):
     subExtra = models.ManyToManyField(SubExtra, blank=True, related_name="sub_extra")
 
     def __str__(self):
-        return f"{self.sub} - Price: ${self.price}"
+        return f"Sub {self.sub} - Price: ${self.price}"
 
 class Pasta(models.Model):
     pasta = models.CharField(max_length=63)
     price = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.pasta} - Price: ${self.price}"
+        return f"Pasta {self.pasta} - Price: ${self.price}"
 
 class Salad(models.Model):
     salad = models.CharField(max_length=63)
     price = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.salad} - Price: ${self.price}"
+        return f"Salad {self.salad} - Price: ${self.price}"
 
 class Platter(models.Model):
     platter = models.CharField(max_length=63)
@@ -66,7 +66,7 @@ class Platter(models.Model):
     price = models.FloatField(default=0)
 
     def __str__(self):
-        return f"{self.platter} - Price: ${self.price}"
+        return f"Platter {self.platter} - Price: ${self.price}"
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -74,6 +74,7 @@ class Order(models.Model):
     sub = models.ManyToManyField(Sub, blank=True, related_name="order_sub")
     salad = models.ManyToManyField(Salad, blank=True, related_name="order_salad")
     platter = models.ManyToManyField(Platter, blank=True, related_name="order_platter")
+    total = models.FloatField(default=0)
     checkedout = models.BooleanField(default=False)
 
 # Create your models here.

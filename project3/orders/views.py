@@ -25,8 +25,7 @@ def index(request):
         context = {
             "message": None,
         }
-        return render(request, "orders/login.html", context) 
-        #return HttpResponse("Project 3: TODO")
+        return render(request, "orders/login.html", context)
 
 def login_view(request):
     username = request.POST["username"]
@@ -60,6 +59,19 @@ def register_view(request):
 
 def add_to_order(request):
     user = request.user
+    print("todo update db and render")
     #product = request.POST["product"]
     #print("User:" + str(user.id) + " Product: " + product)
-    return HttpResponse(user.id)
+    context = {
+            "user": request.user,
+            "pizzas": Pizza.objects.all(),
+            "toppings": PizzaTopping.objects.all(),
+            "subs": Sub.objects.all(),
+            "subextras": SubExtra.objects.all(),
+            "pastas": Pasta.objects.all(),
+            "salads": Salad.objects.all(),
+            "platters": Platter.objects.all(),
+            "orders": Order.objects.all()
+        }
+    return render(request, "orders/index.html", context)
+    #return HttpResponse(user.id)

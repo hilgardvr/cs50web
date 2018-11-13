@@ -14,30 +14,30 @@ function checkout() {
     }
 }
 
+function checkNumToppings() {
+    console.log(this);
+}
+
 function addToOrder(button) {
-    item = button.dataset.product;
+    item = button.dataset.product.split(" ");
     const menuDiv = document.querySelector("#showMenu");
     menuDiv.style.display = "none";
     const itemDiv = document.querySelector("#confirmItem");
     itemDiv.style.display = "block";
+    console.log(item);
+    if (item.length == 9 && item[0] == "Pizza") {
+        document.querySelector("#num_toppings").innerHTML = item[3];
+        document.querySelector("#product").value = item[0];
+        document.querySelector("#pizzaType").value = item[1];
+        document.querySelector("#size").value = item[2];
+        document.querySelector("#price").value = parseFloat(item[8]).toFixed(2);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector("#confirmItem").style.display = "none";
-    let localCart = "todo - api get saved db order"
-    /* if (localCart) {
-        localCart.cartArray.forEach(cartItem => {
-            cart = document.querySelector("#cart");
-            li = document.createElement('li');
-            li.innerHTML = cartItem;
-            cart.append(li);
-        });
-    } else {
-        localCart = {
-            cartArray: []
-        }
-    } */
+    let localCart = "todo - api get saved db order";
     
     document.querySelectorAll('button').forEach(button => { 
         button.onclick = () => {
@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (button.id == "clearCart") {
                 clearLocal();
             } else if (button.className == "addToOrder") {
-                addToOrder(button)
+                addToOrder(button);
             } else {
                 console.log('no associated functionality..');
             }
         }
     });
-})
+});

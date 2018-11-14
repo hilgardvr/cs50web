@@ -4,9 +4,7 @@ var item = {
     product: "",
     size: "",
     pizzaType: "",
-
     numToppings: 0,
-
 }
 
 function clearLocal() {
@@ -43,7 +41,6 @@ function showToppings(numTop) {
 
 function addToOrder(button) {
     item.product = button.dataset.product;
-    //console.log(pizza.pizza);
     const request = new XMLHttpRequest();
         request.open("GET", "/add_to_order");
         const data = new FormData();

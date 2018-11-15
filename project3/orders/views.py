@@ -59,7 +59,11 @@ def register_view(request):
 
 def add_to_order(request):
     user = request.user
-    print("todo update db and render")
+    if (request.POST["product"] == "Pizza"):
+        pizza = request.POST["toppings"]
+        pizzaType = request.POST["pizza_base"]
+        size = request.POST[""]
+        
     #product = request.POST["product"]
     #print("User:" + str(user.id) + " Product: " + product)
     context = {

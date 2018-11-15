@@ -24,16 +24,19 @@
                     <div id="size_div">
                         Size: <input class="form-control" type="text" name="size" id="size" readonly/><br/>
                     </div>
-                    <div id="price_div">
-                        Price: <input class="form-control" type="text" name="price" id="price" readonly/><br/>
+                    <div id="num_toppings_div">
+                        Toppings: <input class="form-control" type="text" name="toppings" id="toppings" readonly/><br/>
                     </div>
                     <div id="pizza_toppings">
-                        Toppings: (select <span id="num_toppings">0</span>)
+                        Select Toppings: (select <span id="num_toppings">0</span>)
                         <select multiple id="pizza_toppings_select" size=10 onchange="checkNumToppings()">
                         {% for topping in toppings %}
                             <option value={{topping}} on>{{ topping }}</option>
                         {% endfor %}
                         </select>
+                    </div>
+                    <div id="price_div">
+                        Price: <input class="form-control" type="text" name="price" id="price" readonly/><br/>
                     </div>
                     <input type="submit" value="Submit">
                 </div>

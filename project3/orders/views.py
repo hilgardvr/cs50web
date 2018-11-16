@@ -61,21 +61,29 @@ def add_to_order(request):
     user = request.user
     if (request.POST["product"] == "Pizza"):
         pizza = request.POST["toppings"]
-        pizzaType = request.POST["pizza_base"]
-        size = request.POST[""]
+        #print(pizza)
+        pizzaType = PizzaType.objects.get(pizzaType=request.POST["pizza_base"])
+        size = Size.objects.get(size=request.POST["size"])
+        price = request.POST["price"]
+        pizzaToAdd = Pizza.objects.get(pizza=pizza, pizzaType=pizzaType, size=size, price=price)
+        toppings = request.POST.getlist("pizza_toppings_select")
+        for topping in toppings:
+            top = PizzaTopping.objects.get(topping=topping)
+            pizzaToAdd.pizzaToppings.add(top)
+        print(pizzaToAdd.pizzaToppings)
         
     #product = request.POST["product"]
     #print("User:" + str(user.id) + " Product: " + product)
     context = {
-            "user": request.user,
-            "pizzas": Pizza.objects.all(),
-            "toppings": PizzaTopping.objects.all(),
-            "subs": Sub.objects.all(),
-            "subextras": SubExtra.objects.all(),
-            "pastas": Pasta.objects.all(),
-            "salads": Salad.objects.all(),
-            "platters": Platter.objects.all(),
-            "orders": Order.objects.all()
-        }
+        "user": request.user,
+        "pizzas": Pizza.objects.all(),
+        "toppings": PizzaTopping.objects.all(),
+        "subs": Sub.objects.all(),
+        "subextras": SubExtra.objects.all(),
+        "pastas": Pasta.objects.all(),
+        "salads": Salad.objects.all(),
+        "platters": Platter.objects.all(),
+        "orders": Order.objects.all()
+    }
     return render(request, "orders/index.html", context)
     #return HttpResponse(user.id)

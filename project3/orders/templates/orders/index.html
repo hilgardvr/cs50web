@@ -28,10 +28,11 @@
                         Toppings: <input class="form-control" type="text" name="toppings" id="toppings" readonly/><br/>
                     </div>
                     <div id="pizza_toppings">
-                        Select Toppings: (select <span id="num_toppings">0</span>)
-                        <select multiple id="pizza_toppings_select" size=10 onchange="checkNumToppings()">
+                        Select Toppings: (select <span id="num_toppings">0</span>)<br/>
+                        <!-- <select multiple title="pizza_toppings_select" id="pizza_toppings_select" size=10 onchange="checkNumToppings()"> -->
                         {% for topping in toppings %}
-                            <option value={{topping}} on>{{ topping }}</option>
+                            <input type="checkbox" name="pizza_toppings_select" value={{topping}}>{{ topping }}<br/>
+                            <!-- <option value={{topping}} on>{{ topping }}</option> -->
                         {% endfor %}
                         </select>
                     </div>

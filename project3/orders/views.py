@@ -20,12 +20,12 @@ def index(request):
             "platters": Platter.objects.all(),
             "orders": Order.objects.all()
         }
-        return render(request, "orders/index.html", context)      
+        return render(request, "orders/index.html", context)
     else:
         context = {
             "message": None,
         }
-        return render(request, "orders/login.html", context) 
+        return render(request, "orders/login.html", context)
         #return HttpResponse("Project 3: TODO")
 
 def login_view(request):
@@ -60,6 +60,6 @@ def register_view(request):
 
 def add_to_order(request):
     user = request.user
-    #product = request.POST["product"]
-    #print("User:" + str(user.id) + " Product: " + product)
+    product = request.GET.get("product")
+    print("User:" + str(user.id) + " Product: " + product)
     return HttpResponse(user.id)

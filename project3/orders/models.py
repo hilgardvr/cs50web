@@ -15,7 +15,7 @@ class PizzaType(models.Model):
         return f"{self.pizzaType}"
 
 class PizzaTopping(models.Model):
-    topping = models.CharField(max_length=63) 
+    topping = models.CharField(max_length=63)
 
     def __str__(self):
         return f"{self.topping}"

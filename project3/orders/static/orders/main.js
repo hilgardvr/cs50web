@@ -40,23 +40,28 @@ function showToppings(numTop) {
 }
 
 function addToOrder(button) {
-    item.product = button.dataset.product;
+    const product = button.dataset.product;
+    console.log(product);
+    let getURL = "product=";
+    if (product === "pizza") {
+        getURL += "pizza&pizza=" + button.dataset.pizza + "&pizzaType=" + button.dataset.pizzaType
+            + "&size=" + button.dataset.size + "&price=" + button.dataset.price;
+        console.log(getURL);
+    }
     const request = new XMLHttpRequest();
-        request.open("GET", "/add_to_order");
-        const data = new FormData();
-        data.append("product", "pizza");
+        request.open("GET", "/add_to_order?" + getURL);
         request.onload = () => {
             const res = request.responseText;
-            alert("received from server: " + res);
+            //alert("received from server: " + res);
             if (product.includes("Topping")) {
                 showToppings(product.match(/\d/g).map(Number)[0]);
             }
             const cart = document.querySelector("#cart");
             const li = document.createElement('li');
-            li.innerHTML = pizza;
+            li.innerHTML = product;
             cart.append(li);
         }
-    request.send(data);
+    request.send();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -75,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cartArray: []
         }
     }
-    document.querySelectorAll('button').forEach(button => { 
+    document.querySelectorAll('button').forEach(button => {
         button.onclick = () => {
             if (button.id == "submitCart") {
                 checkout();

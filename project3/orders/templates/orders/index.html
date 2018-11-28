@@ -41,7 +41,8 @@
 
     <h4>Pizza's</h4>
     {% for pizza in pizzas %}
-        <li data-set>{{ pizza }}<button class="addToOrder" data-product="{{ pizza }}">Add to cart</button></li>
+        <li data-set>{{ pizza }}<button class="addToOrder" data-product="pizza" data-pizza="{{ pizza.pizza }}" data-pizzaType="{{ pizza.pizzaType }}"
+            data-size="{{ pizza.size }}" data-price="{{ pizza.price }}">Add to cart</button></li>
     {% endfor %}       
 
     <h4>Pizza Toppings</h4>

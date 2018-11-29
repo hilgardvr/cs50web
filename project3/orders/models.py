@@ -44,7 +44,7 @@ class Sub(models.Model):
     subExtra = models.ManyToManyField(SubExtra, blank=True, related_name="sub_extra")
 
     def __str__(self):
-        return f"{self.sub} - Price: ${self.price}"
+        return f"{self.size} {self.sub} - Price: ${self.price}"
 
 class Pasta(models.Model):
     pasta = models.CharField(max_length=63)

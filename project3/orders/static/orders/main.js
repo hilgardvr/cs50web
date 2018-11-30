@@ -40,19 +40,18 @@ function showToppings(numTop) {
 }
 
 function addToOrder(button) {
-    const product = button.dataset.product;
-    console.log(product);
+    const product = button.dataset.producttype;
+    //console.log(button.dataset.pizzatype);
     let getURL = "product=";
     if (product === "pizza") {
-        getURL += "pizza&pizza=" + button.dataset.pizza + "&pizzaType=" + button.dataset.pizzaType
+        getURL += "pizza&pizza=" + button.dataset.pizza + "&pizzaType=" + button.dataset.pizzatype
             + "&size=" + button.dataset.size + "&price=" + button.dataset.price;
-        console.log(getURL);
+        //console.log(getURL);
     }
     const request = new XMLHttpRequest();
         request.open("GET", "/add_to_order?" + getURL);
         request.onload = () => {
             const res = request.responseText;
-            //alert("received from server: " + res);
             if (product.includes("Topping")) {
                 showToppings(product.match(/\d/g).map(Number)[0]);
             }

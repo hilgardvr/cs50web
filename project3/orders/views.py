@@ -61,5 +61,14 @@ def register_view(request):
 def add_to_order(request):
     user = request.user
     product = request.GET.get("product")
-    print("User:" + str(user.id) + " Product: " + product)
+    if product == "pizza":
+        pizza = request.GET.get("pizza")
+        type = request.GET.get("pizzaType")
+        size = request.GET.get("size")
+        price = request.GET.get("price")
+        pizzaSize = Size.objects.get(size=size)
+        pizzaType = PizzaType.objects.get(pizzaType=type)
+        item = Pizza.objects.get(pizza=pizza, size=pizzaSize, pizzaType=pizzaType)
+        print("pizza to add: " + item.__str__())
+        Order(user=user, pizza=item).save()
     return HttpResponse(user.id)
